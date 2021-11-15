@@ -31,7 +31,7 @@ Future<void> main(List<String> arguments) async {
   final int delay = int.tryParse(delayString)!;
 
   Dprint.info(
-      'launching the chrome browser this may take some time for the first run');
+      'launching the chrome browser this may take some time for the first run, because it needs to be downloaded');
 
   final Browser browser =
       await puppeteer.launch(headless: false, defaultViewport: null);
