@@ -30,13 +30,19 @@ Future<void> main(List<String> arguments) async {
 
   final int delay = int.tryParse(delayString)!;
 
+  Dprint.info(
+      'launching the chrome browser this may take some time for the first run');
+
   final Browser browser =
       await puppeteer.launch(headless: false, defaultViewport: null);
+
   final Page chatbotPage = await browser.newPage();
   final Page discordPage = await browser.newPage();
 
-  await chatbotPage.goto('https://www.chimbot.com', wait: Until.networkIdle);
-  await discordPage.goto(discordChannelLink, wait: Until.networkIdle);
+  await Future.any([
+    chatbotPage.goto('https://www.chimbot.com', wait: Until.networkIdle),
+    discordPage.goto(discordChannelLink, wait: Until.networkIdle),
+  ]);
 
   final ChatBloc chatBloc = ChatBloc(page: chatbotPage);
   final DiscordBloc discordBloc = DiscordBloc(page: discordPage);
@@ -56,9 +62,10 @@ Future<void> main(List<String> arguments) async {
           latestMessage.messageContent != answer &&
           latestMessage.messageContent.trim() != '') {
         answer = await chatBloc.sendToBot(latestMessage.messageContent);
+        Dprint.info('${latestMessage.messageContent} => $answer\n');
+
         await discordBloc.sendMessage(answer, discordPage);
         oldMessage = latestMessage;
-        Dprint.info('${latestMessage.messageContent} => $answer\n');
         await Future.delayed(Duration(seconds: delay));
       }
     } catch (e) {
