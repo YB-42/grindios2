@@ -49,12 +49,3 @@ class DiscordMessage {
     return super.toString();
   }
 }
-
-// void main() {
-//   String input =
-//       """sgniwder — Today at 7:42 PMbooks for everyone!
-// """;
-
-//   final f = DiscordMessage.fromString(input);
-//   f.toString();
-// }

@@ -7,6 +7,7 @@ import 'bloc/chat_bloc.dart';
 import 'bloc/discord_bloc.dart';
 import 'models/discord_message.dart';
 import 'utils/d_print.dart';
+import 'utils/utils.dart';
 
 Future<void> main(List<String> arguments) async {
   print(
@@ -63,6 +64,7 @@ Future<void> main(List<String> arguments) async {
           latestMessage.messageContent.trim() != '') {
         answer = await chatBloc.sendToBot(latestMessage.messageContent);
         Dprint.info('${latestMessage.messageContent} => $answer\n');
+        answer = Utils.cleanBotAnswer(answer);
 
         await discordBloc.sendMessage(answer, discordPage);
         oldMessage = latestMessage;
